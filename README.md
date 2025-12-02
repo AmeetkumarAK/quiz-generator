@@ -1,5 +1,6 @@
-quiz_app.py        → Main Python quiz program
-questions.json     → Question database
-quiz_results.csv   → Score history (auto-generated)
-quiz_*.json        → Detailed quiz results (auto-generated)
-README.md          → Project documentation
+✅ Levels (Easy / Medium / Hard)  
+✅ Timer system for each question  
+✅ Admin mode for adding questions  
+✅ Automatic score saving  
+✅ Detailed result reports  
+✅ Question export to CSV
