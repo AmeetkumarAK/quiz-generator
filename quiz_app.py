@@ -173,50 +173,58 @@ def main_menu():
         print("7. Levels (Easy / Medium / Hard)")
 
         choice = input("Enter choice: ").strip()
+
         if choice == "1":
             take_quiz(questions)
+
         elif choice == "2":
             try:
                 n = int(input("Number of questions: ").strip())
-                if n <= 0:
-                    print("Enter a positive number.\n")
-                else:
+                if n > 0:
                     take_quiz(questions, n)
+                else:
+                    print("Enter a positive number.\n")
             except ValueError:
                 print("Enter a valid number.\n")
+
         elif choice == "3":
             add_question(questions)
+
         elif choice == "4":
             list_questions(questions)
+
         elif choice == "5":
             fname = input("Export filename (default questions_export.csv): ").strip()
-            if fname == "": fname = "questions_export.csv"
+            if fname == "":
+                fname = "questions_export.csv"
             export_questions_csv(questions, fname)
+
         elif choice == "6":
             print("Exiting. Goodbye!")
             break
+
         elif choice == "7":
-    print("\n=== LEVELS ===")
-    print("Choose a level:")
-    print("1. Easy")
-    print("2. Medium")
-    print("3. Hard")
-    level = input("Enter choice: ").strip()
+            print("\n=== LEVELS ===")
+            print("1. Easy")
+            print("2. Medium")
+            print("3. Hard")
+            level = input("Enter level: ").strip()
 
-    level_map = {"1": "easy", "2": "medium", "3": "hard"}
-    diff = level_map.get(level)
+            level_map = {"1": "easy", "2": "medium", "3": "hard"}
+            diff = level_map.get(level)
 
-    if diff:
-        diff_questions = [q for q in questions if diff in q.get("tags", [])]
-        if not diff_questions:
-            print(f"No {diff} level questions available.\n")
-        else:
-            take_quiz(diff_questions)
-    else:
-        print("Invalid level.\n")
+            if diff:
+                diff_questions = [q for q in questions if diff in q.get("tags", [])]
+                if diff_questions:
+                    take_quiz(diff_questions)
+                else:
+                    print(f"No {diff} questions available.\n")
+            else:
+                print("Invalid level.\n")
 
         else:
             print("Invalid choice. Try again.\n")
+
 
 if __name__ == '__main__':
     main_menu()
