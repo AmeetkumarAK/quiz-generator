@@ -195,7 +195,7 @@ def main_menu():
         elif choice == "6":
             print("Exiting. Goodbye!")
             break
-            elif choice == "7":
+        elif choice == "7":
     print("\n=== LEVELS ===")
     print("Choose a level:")
     print("1. Easy")
