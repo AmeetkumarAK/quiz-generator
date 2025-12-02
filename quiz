@@ -14,10 +14,52 @@ QUESTIONS_FILE = "questions.json"
 RESULTS_FILE = "quiz_results.csv"
 
 def load_questions():
+    # If questions.json does NOT exist, create it with starter questions
     if not os.path.exists(QUESTIONS_FILE):
-        return []
+        starter_questions = [
+            {
+                "question": "What is the capital of India?",
+                "options": ["Delhi", "Mumbai", "Kolkata", "Chennai"],
+                "answer_index": 0,
+                "tags": ["geography", "easy"]
+            },
+            {
+                "question": "Solve: 12 × 8",
+                "options": ["96", "108", "72", "84"],
+                "answer_index": 0,
+                "tags": ["math", "easy"]
+            },
+            {
+                "question": "Who invented the C programming language?",
+                "options": [
+                    "Bjarne Stroustrup",
+                    "Dennis Ritchie",
+                    "James Gosling",
+                    "Ken Thompson"
+                ],
+                "answer_index": 1,
+                "tags": ["programming", "medium"]
+            },
+            {
+                "question": "Approximate value of PI?",
+                "options": ["2.14", "3.14", "4.14", "3.41"],
+                "answer_index": 1,
+                "tags": ["math", "medium"]
+            },
+            {
+                "question": "Which year was C created?",
+                "options": ["1969", "1972", "1980", "1990"],
+                "answer_index": 1,
+                "tags": ["history", "hard"]
+            }
+        ]
+        save_questions(starter_questions)
+        return starter_questions
+
+    # Otherwise load existing question file
     with open(QUESTIONS_FILE, "r", encoding="utf-8") as f:
         return json.load(f)
+
 
 def save_questions(questions):
     with open(QUESTIONS_FILE, "w", encoding="utf-8") as f:
