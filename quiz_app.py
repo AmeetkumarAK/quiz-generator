@@ -9,6 +9,24 @@ import random
 import csv
 from datetime import datetime
 import os
+import threading
+
+def timed_input(prompt, timeout=10):
+    answer = [None]
+
+    def get_input():
+        answer[0] = input(prompt)
+
+    t = threading.Thread(target=get_input)
+    t.daemon = True
+    t.start()
+    t.join(timeout)
+
+    if t.is_alive():
+        print("\nTime's up!")
+        return None
+    return answer[0]
+
 
 QUESTIONS_FILE = "questions.json"
 RESULTS_FILE = "quiz_results.csv"
@@ -36,15 +54,29 @@ def take_quiz(questions, num_questions=None):
         print(f"\nQ{i}. {q['question']}")
         for idx, opt in enumerate(q["options"], start=1):
             print(f"  {idx}. {opt}")
-        while True:
-            try:
-                choice = int(input("Your answer (number): ").strip())
-                if 1 <= choice <= len(q["options"]):
-                    break
-                else:
-                    print("Choice out of range. Try again.")
-            except ValueError:
-                print("Please enter a number.")
+       while True:
+    user_input = timed_input("Your answer (number): ", timeout=10)
+
+    if user_input is None:
+        print("You ran out of time!")
+        is_correct = False
+        answers.append({
+            "question": q["question"],
+            "selected": None,
+            "correct": correct_index,
+            "is_correct": False
+        })
+        break
+
+    try:
+        choice = int(user_input)
+        if 1 <= choice <= len(q["options"]):
+            break
+        else:
+            print("Choice out of range. Try again.")
+    except ValueError:
+        print("Please enter a valid number.")
+
         correct_index = q["answer_index"] + 1
         is_correct = (choice == correct_index)
         if is_correct:
@@ -138,6 +170,8 @@ def main_menu():
         print("4. List Questions")
         print("5. Export Questions to CSV")
         print("6. Exit")
+        print("7. Levels (Easy / Medium / Hard)")
+
         choice = input("Enter choice: ").strip()
         if choice == "1":
             take_quiz(questions)
@@ -161,6 +195,26 @@ def main_menu():
         elif choice == "6":
             print("Exiting. Goodbye!")
             break
+            elif choice == "7":
+    print("\n=== LEVELS ===")
+    print("Choose a level:")
+    print("1. Easy")
+    print("2. Medium")
+    print("3. Hard")
+    level = input("Enter choice: ").strip()
+
+    level_map = {"1": "easy", "2": "medium", "3": "hard"}
+    diff = level_map.get(level)
+
+    if diff:
+        diff_questions = [q for q in questions if diff in q.get("tags", [])]
+        if not diff_questions:
+            print(f"No {diff} level questions available.\n")
+        else:
+            take_quiz(diff_questions)
+    else:
+        print("Invalid level.\n")
+
         else:
             print("Invalid choice. Try again.\n")
 
